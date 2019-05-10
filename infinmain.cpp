@@ -5,12 +5,12 @@
 #include "Player.h"
 
 
-std::vector<int> DECK = {1,1,1,1,1,1,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,5,5,
-5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,
-8,8,8,8,8,8,9,9,9,9,9,10,10,10,10};
-// std::vector<int> OURDECK={1,1,1,2,2,3,3,3,4,4,5,5,5,5,6,6};
-// std::vector<int> REGDECK = {1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,
-// 11,11,11,11,12,12,12,12,13,13,13,13};
+// std::vector<int> REGDECK = {1,1,1,1,1,1,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,5,5,
+// 5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,
+// 8,8,8,8,8,8,9,9,9,9,9,10,10,10,10};
+// std::vector<int> REGDECK={1,1,1,2,2,3,3,3,4,4,5,5,5,5,6,6};
+std::vector<int> REGDECK = {1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,
+8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,13,13,13,13};
 
 
 
@@ -37,7 +37,7 @@ void makeHands(std::vector<int>& handOne, std::vector<int>& handTwo, std::vector
   for(int i=0;i<dealerDeck.size();i++){
     if(i%2){//ODD NUMBERS
       handTwo.push_back(dealerDeck[i]);
-    }else{//EVEN NUMBERS
+    }else{//0 and EVEN NUMBERS
       handOne.push_back(dealerDeck[i]);
     }
   }
@@ -64,7 +64,8 @@ int war(Player& p1, Player& p2, int winner){
   // std::cout<<"\n\n-----------------------60------------------------\n\n";
   if(p2.getHand().size()<5){
     p2.setHandWithWinPile();
-    p2.setCardToPlay(p2.getHand().size()-1);
+    // p2.setCardToPlay(0);
+    // p2.setCardToPlay(p2.getHand().size()-1);
     if(p2.getHand().size()<5){
       winner=0;//p1 won
     }
@@ -72,13 +73,20 @@ int war(Player& p1, Player& p2, int winner){
   // std::cout<<"\n\n-----------------------67------------------------\n\n";
   if(winner==-1){
     warWinnings.push_back(p1.getHand().at(p1.getCardToPlay()));//put p1 card in war winnings
-    warWinnings.push_back(p2.getHand().at(p2.getCardToPlay()));//put p2 car in war winnings
+    warWinnings.push_back(p2.getHand().at(p2.getCardToPlay()));//put p2 card in war winnings
     warWinnings.insert(warWinnings.end(),{p1.getHand().at(p1.getCardToPlay()+1),p1.getHand().at(p1.getCardToPlay()+2),p1.getHand().at(p1.getCardToPlay()+3)});//put three cards from p1 in war winnings
-    warWinnings.insert(warWinnings.end(),{p2.getHand().at(p2.getCardToPlay()-1),p2.getHand().at(p2.getCardToPlay()-2),p2.getHand().at(p2.getCardToPlay()-3)});//put three cards from p2 in war winnings
+    warWinnings.insert(warWinnings.end(),{p2.getHand().at(p2.getCardToPlay()+1),p2.getHand().at(p2.getCardToPlay()+2),p2.getHand().at(p2.getCardToPlay()+3)});//put three cards from p2 in war winnings
+
+    // warWinnings.insert(warWinnings.end(),{p2.getHand().at(p2.getCardToPlay()-1),p2.getHand().at(p2.getCardToPlay()-2),p2.getHand().at(p2.getCardToPlay()-3)});//put three cards from p2 in war winnings
+    
     // std::cout<<"\n\n-----------------------72------------------------\n\n";
     p1.getHand().erase(p1.getHand().begin(),p1.getHand().begin()+4);//erase four cards from beginning of p1
-    p2.getHand().erase(p2.getHand().begin()+p2.getHand().size()-4,p2.getHand().end());//erase four cards from end of p2
-    p2.setCardToPlay(p2.getHand().size()-1);
+    p2.getHand().erase(p2.getHand().begin(),p2.getHand().begin()+4);//erase four cards from beginning of p2
+    // p2.setCardToPlay(0);
+
+    // p2.getHand().erase(p2.getHand().begin()+p2.getHand().size()-4,p2.getHand().end());//erase four cards from end of p2
+    // p2.setCardToPlay(p2.getHand().size()-1);
+    
     // std::cout<<"\n\n-----------------------76------------------------\n\n";
     if(p1.getHand().at(p1.getCardToPlay())>p2.getHand().at(p2.getCardToPlay())){
       //add winnings to p1 pile
@@ -101,27 +109,36 @@ int compareOurCards(Player& p1, Player& p2,int winner){
   // std::cout<<"CARDS\n";
   // printCards(cards);
   
-  // std::cout<<"\nHANDS\nHANDONE";
+  // std::cout<<"\nHANDS\nHANDONE\n";
   // printCards(p1.getHand());
-  // std::cout<<"\n\n\n\nHANDTWO";
+  // std::cout<<"\n\n\n\nHANDTWO\n";
   // printCards(p2.getHand());
   // std::cout<<"\n\n\n\n";
   
+  
   if(p1Card>p2Card){
-    //remove lost cards from p2 and put them into p1's pile
     p1.getHand().erase(p1.getHand().begin());
-    p2.getHand().pop_back();
-    p2.setCardToPlay(p2.getHand().size()-1);
+    p2.getHand().erase(p2.getHand().begin());
+    //remove cards from and put them into p1's pile
+    
+    // p1.getHand().erase(p1.getHand().begin());
+    // p2.getHand().pop_back();
+    // p2.setCardToPlay(p2.getHand().size()-1);
+    
     p1.addToPile(cards);
     // printCards(p1.getHand());
     // std::cout<<"\n\n\n\n";
     // printCards(p2.getHand());
   }
   else if(p1Card<p2Card){
-    //remove lost cards from p1 and put them into p2's pile 
     p1.getHand().erase(p1.getHand().begin());
-    p2.getHand().pop_back();
-    p2.setCardToPlay(p2.getHand().size()-1);
+    p2.getHand().erase(p2.getHand().begin());
+    //remove cards and put them into p2's pile 
+    
+    // p1.getHand().erase(p1.getHand().begin());
+    // p2.getHand().pop_back();
+    // p2.setCardToPlay(p2.getHand().size()-1);
+    
     p2.addToPile(cards);
     // printCards(p1.getHand());
     // std::cout<<"\n\n\n\n";
@@ -141,7 +158,7 @@ int compareOurCards(Player& p1, Player& p2,int winner){
   return winner;
 }
 
-int startOurGame(Player& playerOne,Player& playerTwo){//player two play from bottom of hand and player one play from top of hand
+int startOurGame(Player& playerOne,Player& playerTwo){//player two play from top of hand and player one play from top of hand
   int winner=-1;
   // std::cout<<"---------------------------WINNER"<<winner<<"\n\n";
   while (winner==-1) {
@@ -158,12 +175,13 @@ int startOurGame(Player& playerOne,Player& playerTwo){//player two play from bot
           winner=1;//if winner == 1 p2 won
           // std::cout<<"WINNERP2 "<<winner<<"\n\n";
         }else{
-          // std::cout<<"P1PILE\n\n";
+          // std::cout<<"\nP1PILE\n\n";
           // printCards(playerOne.getPile());
           playerOne.setHandWithWinPile();
-          // std::cout<<"P1NEWHAND\n\n";
-          // printCards(playerOne.getHand());
-          playerOne.setCardToPlay(0);
+          // std::cout<<"\nP2PILE\n\n";
+          // printCards(playerTwo.getPile());
+          
+          // playerOne.setCardToPlay(0);
         }
       }
       if(playerTwo.getHand().size()==0){
@@ -171,12 +189,14 @@ int startOurGame(Player& playerOne,Player& playerTwo){//player two play from bot
           winner=0;//if winner ==0 p1 won
           // std::cout<<"WINNERP1 "<<winner<<"\n\n";
         }else{
-          // std::cout<<"P2PILE\n\n";
+          // std::cout<<"\nP1PILE\n\n";
+          // printCards(playerOne.getPile());
+          // std::cout<<"\nP2PILE\n\n";
           // printCards(playerTwo.getPile());
           playerTwo.setHandWithWinPile();
-          // std::cout<<"P2NEWHAND\n\n";
-          // printCards(playerTwo.getHand());
-          playerTwo.setCardToPlay(playerTwo.getHand().size()-1);
+          
+          // playerTwo.setCardToPlay(0);
+
         }
       } 
     } 
@@ -185,14 +205,16 @@ int startOurGame(Player& playerOne,Player& playerTwo){//player two play from bot
 }
 
 int ourGame(Player& p1, Player& p2){
-  shuffle(DECK);
-  makeHands(p1.getHand(),p2.getHand(),DECK);
+  shuffle(REGDECK);
+  makeHands(p1.getHand(),p2.getHand(),REGDECK);
   // std::cout<<"HANDONE\n";
   // printCards(p1.getHand());
   // std::cout<<"HANDTWO\n";
   // printCards(p2.getHand());
   p1.setCardToPlay(0);
-  p2.setCardToPlay(p2.getHand().size()-1);
+  // p2.setCardToPlay(p2.getHand().size()-1);
+  p2.setCardToPlay(0);
+
   
   int winner=startOurGame(p1,p2);
   // std::cout<<"\n\n\n\n\n\n\n\n\n\n"<<startOurGame(p1,p2)<<"\n\n";
@@ -200,7 +222,7 @@ int ourGame(Player& p1, Player& p2){
 }
 
 int main(int argc, char const *argv[]) {
-  std::cout<<"PLAYER TWO WINS MOST OF THE TIME BECAUSE THEY PLAY FROM THE BOTTOM OF THE DECK\n";
+  std::cout<<"INFINATE GAME CODE\n";//when this game is played in produces infinate games 
   Player playerOne;
   Player playerTwo;
   int p1Victories=0;
